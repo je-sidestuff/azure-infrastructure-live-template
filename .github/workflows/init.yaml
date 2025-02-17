@@ -1,0 +1,24 @@
+---
+
+name: This workflow will initialize the repository
+
+on:
+  push:
+    tags:
+      - init
+
+jobs:
+  initialize-repo:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write # This is required for requesting the JWT
+      contents: write # This is required for pushing tags
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Initialize repo
+        run: |
+          chmod +x .smart-init/scripts/*.sh
+          .smart-init/scripts/on_init.sh
+        shell: bash
