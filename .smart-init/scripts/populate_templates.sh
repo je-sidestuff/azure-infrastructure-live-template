@@ -63,20 +63,24 @@ cat << EOF > "${TEMP_DIR}/main.tf"
 module "scaffolding" {
   source = "github.com/je-sidestuff/terraform-github-orchestration//modules/terragrunt/scaffolder/from-json/?ref=environment_deployment_support"
 
-  input_json = ${SELF_BOOTSTRAP_SCAFFOLDING}
+  input_json = <<EOT
+${SELF_BOOTSTRAP_SCAFFOLDING}
+EOT
 }
 EOF
 
-echo "Which terraform?"
-which terraform
+>&2 cat ${TEMP_DIR}/main.tf
+
+>&2 echo "Which terraform?"
+>&2 which terraform
 
 sudo apt-get install unzip
 curl "https://releases.hashicorp.com/terraform/1.3.7/terraform_1.3.7_linux_amd64.zip" -o "terraform_1.3.7_linux_amd64.zip"
 unzip terraform_1.3.7_linux_amd64.zip
 sudo mv terraform /usr/local/bin/terraform
 
-echo "Which terraform?"
-which terraform
+>&2 echo "Which terraform?"
+>&2 which terraform
 
 echo "Which terragrunt?"
 which terragrunt
@@ -85,8 +89,8 @@ curl -L https://github.com/gruntwork-io/terragrunt/releases/download/v0.75.10/te
 chmod +x terragrunt
 sudo mv terragrunt /usr/local/bin/terragrunt
 
-echo "Which terragrunt?"
-which terragrunt
+>&2 echo "Which terragrunt?"
+>&2 which terragrunt
 
 cd "${TEMP_DIR}" && terraform init && terraform plan && cd -
 
