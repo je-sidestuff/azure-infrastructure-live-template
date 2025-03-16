@@ -8,17 +8,17 @@ on:
       - init
 
 jobs:
-  oidc_debug_test:
-    permissions:
-      contents: read
-      id-token: write
-    runs-on: ubuntu-latest
-    name: A test of the oidc debugger
-    steps:
-      - name: Debug OIDC Claims
-        uses: github/actions-oidc-debugger@main
-        with:
-          audience: '${{ github.server_url }}/${{ github.repository_owner }}'
+  # oidc_debug_test:
+  #   permissions:
+  #     contents: read
+  #     id-token: write
+  #   runs-on: ubuntu-latest
+  #   name: A test of the oidc debugger
+  #   steps:
+  #     - name: Debug OIDC Claims
+  #       uses: github/actions-oidc-debugger@main
+  #       with:
+  #         audience: '${{ github.server_url }}/${{ github.repository_owner }}'
   initialize-repo:
     runs-on: ubuntu-latest
     permissions:

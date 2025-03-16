@@ -55,28 +55,36 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 REPO_INIT_PAYLOAD="$1"
 
 TERRAGRNT_SELF_BOOTSTRAP_DIR="${SCRIPT_DIR}/../../bootstrap/"
+TERRAGRNT_DEPLOYMENT_DIR="${SCRIPT_DIR}/../../"
 
 AZ_AUTH_CLIENT_ID="$(echo ${REPO_INIT_PAYLOAD} | jq -r .mi_client_id)"
 
 SELF_BOOTSTRAP_SCAFFOLDING="$(echo ${REPO_INIT_PAYLOAD} | jq .self_bootstrap)"
 SELF_BOOTSTRAP_SCAFFOLDING="$(echo ${SELF_BOOTSTRAP_SCAFFOLDING} | jq ".scaffolding_root += \"${TERRAGRNT_SELF_BOOTSTRAP_DIR}\"")"
+DEPLOYMENT_SCAFFOLDING="$(echo ${REPO_INIT_PAYLOAD} | jq .deployment)"
+DEPLOYMENT_SCAFFOLDING="$(echo ${SELF_BOOTSTRAP_SCAFFOLDING} | jq ".scaffolding_root += \"${TERRAGRNT_DEPLOYMENT_DIR}\"")"
 
 export TEMP_DIR="$(mktemp -d -t infra-live-XXXX)"
 
 cat << EOF > "${TEMP_DIR}/main.tf"
-module "scaffolding" {
+module "bootstrap_scaffolding" {
   source = "github.com/je-sidestuff/terraform-github-orchestration//modules/terragrunt/scaffolder/from-json/?ref=environment_deployment_support"
 
   input_json = <<EOT
 ${SELF_BOOTSTRAP_SCAFFOLDING}
 EOT
 }
+
+module "deployment_scaffolding" {
+  source = "github.com/je-sidestuff/terraform-github-orchestration//modules/terragrunt/scaffolder/from-json/?ref=environment_deployment_support"
+
+  input_json = <<EOT
+${DEPLOYMENT_SCAFFOLDING}
+EOT
+}
 EOF
 
 >&2 cat ${TEMP_DIR}/main.tf
-
->&2 echo "Which terraform?"
->&2 which terraform
 
 >&2 sudo apt-get install unzip
 >&2 curl "https://releases.hashicorp.com/terraform/1.9.1/terraform_1.9.1_linux_amd64.zip" -o "terraform_1.9.1_linux_amd64.zip"
