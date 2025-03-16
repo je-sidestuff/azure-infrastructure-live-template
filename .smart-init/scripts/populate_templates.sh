@@ -57,7 +57,6 @@ REPO_INIT_PAYLOAD="$1"
 TERRAGRNT_SELF_BOOTSTRAP_DIR="${SCRIPT_DIR}/../../bootstrap/"
 
 AZ_AUTH_CLIENT_ID="$(echo ${REPO_INIT_PAYLOAD} | jq -r .mi_client_id)"
-AZ_AUTH_TENANT_ID="$(echo ${REPO_INIT_PAYLOAD} | jq -r .mi_tenant_id)"
 
 SELF_BOOTSTRAP_SCAFFOLDING="$(echo ${REPO_INIT_PAYLOAD} | jq .self_bootstrap)"
 SELF_BOOTSTRAP_SCAFFOLDING="$(echo ${SELF_BOOTSTRAP_SCAFFOLDING} | jq ".scaffolding_root += \"${TERRAGRNT_SELF_BOOTSTRAP_DIR}\"")"
@@ -101,9 +100,6 @@ cd "${TEMP_DIR}"
 >&2 terraform init
 >&2 terraform apply --auto-approve
 cd -
-
->&2 echo "az login --identity --username ${AZ_AUTH_CLIENT_ID} --tenant ${AZ_AUTH_TENANT_ID}"
->&2 az login --identity --username ${AZ_AUTH_CLIENT_ID} --tenant ${AZ_AUTH_TENANT_ID}
 
 >&2 echo "az login --identity --client-id ${AZ_AUTH_CLIENT_ID}"
 >&2 az login --identity --client-id ${AZ_AUTH_CLIENT_ID}
