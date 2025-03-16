@@ -77,8 +77,8 @@ EOF
 >&2 which terraform
 
 sudo apt-get install unzip
-curl "https://releases.hashicorp.com/terraform/1.7.3/terraform_1.7.3_linux_amd64.zip" -o "terraform_1.7.3_linux_amd64.zip"
-unzip terraform_1.7.3_linux_amd64.zip
+curl "https://releases.hashicorp.com/terraform/1.9.1/terraform_1.9.1_linux_amd64.zip" -o "terraform_1.9.1_linux_amd64.zip"
+unzip terraform_1.9.1_linux_amd64.zip
 sudo mv terraform /usr/local/bin/terraform
 
 >&2 echo "Which terraform?"
