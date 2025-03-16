@@ -78,44 +78,27 @@ EOF
 >&2 echo "Which terraform?"
 >&2 which terraform
 
-sudo apt-get install unzip
-curl "https://releases.hashicorp.com/terraform/1.9.1/terraform_1.9.1_linux_amd64.zip" -o "terraform_1.9.1_linux_amd64.zip"
-unzip terraform_1.9.1_linux_amd64.zip
-sudo mv terraform /usr/local/bin/terraform
+>&2 sudo apt-get install unzip
+>&2 curl "https://releases.hashicorp.com/terraform/1.9.1/terraform_1.9.1_linux_amd64.zip" -o "terraform_1.9.1_linux_amd64.zip"
+>&2 unzip terraform_1.9.1_linux_amd64.zip
+>&2 sudo mv terraform /usr/local/bin/terraform
 
->&2 echo "Which terraform?"
->&2 which terraform
+>&2 curl -L https://github.com/gruntwork-io/terragrunt/releases/download/v0.75.10/terragrunt_linux_amd64 -o terragrunt
+>&2 chmod +x terragrunt
+>&2 sudo mv terragrunt /usr/local/bin/terragrunt
 
-echo "Which terragrunt?"
-which terragrunt
-
-curl -L https://github.com/gruntwork-io/terragrunt/releases/download/v0.75.10/terragrunt_linux_amd64 -o terragrunt
-chmod +x terragrunt
-sudo mv terragrunt /usr/local/bin/terragrunt
-
->&2 echo "Which terragrunt?"
->&2 which terragrunt
-
-cd "${TEMP_DIR}"
+>&2 cd "${TEMP_DIR}"
 >&2 terraform init
 >&2 terraform apply --auto-approve
-cd -
+>&2 cd -
 
->&2 echo "az login --identity --client-id ${AZ_AUTH_CLIENT_ID}"
->&2 az login --identity --client-id ${AZ_AUTH_CLIENT_ID}
-
-sleep 20
-
->&2 echo "az login --identity --client-id ${AZ_AUTH_CLIENT_ID}"
->&2 az login --identity --client-id ${AZ_AUTH_CLIENT_ID}
-
-cd "${TERRAGRNT_SELF_BOOTSTRAP_DIR}/terragrunt/sandbox" 
+>&2 cd "${TERRAGRNT_SELF_BOOTSTRAP_DIR}/terragrunt/sandbox" 
 >&2 ls -latr
 >&2 terragrunt run-all plan --terragrunt-non-interactive
 if [ $? -eq 0 ]; then
     export TERRAGGRUNT_SUCCESS="true"
 fi
-cd -
+>&2 cd -
 
 >&2 tree -d ${TEMP_DIR}
 >&2 tree -d ${TERRAGRNT_SELF_BOOTSTRAP_DIR}
