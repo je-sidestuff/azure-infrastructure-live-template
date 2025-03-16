@@ -55,14 +55,14 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 REPO_INIT_PAYLOAD="$1"
 
 TERRAGRNT_SELF_BOOTSTRAP_DIR="${SCRIPT_DIR}/../../bootstrap/"
-TERRAGRNT_DEPLOYMENT_DIR="${SCRIPT_DIR}/../../"
+TERRAGRNT_DEPLOYMENT_DIR="${SCRIPT_DIR}/../../deployment/"
 
 AZ_AUTH_CLIENT_ID="$(echo ${REPO_INIT_PAYLOAD} | jq -r .mi_client_id)"
 
 SELF_BOOTSTRAP_SCAFFOLDING="$(echo ${REPO_INIT_PAYLOAD} | jq .self_bootstrap)"
 SELF_BOOTSTRAP_SCAFFOLDING="$(echo ${SELF_BOOTSTRAP_SCAFFOLDING} | jq ".scaffolding_root += \"${TERRAGRNT_SELF_BOOTSTRAP_DIR}\"")"
 DEPLOYMENT_SCAFFOLDING="$(echo ${REPO_INIT_PAYLOAD} | jq .deployment)"
-DEPLOYMENT_SCAFFOLDING="$(echo ${SELF_BOOTSTRAP_SCAFFOLDING} | jq ".scaffolding_root += \"${TERRAGRNT_DEPLOYMENT_DIR}\"")"
+DEPLOYMENT_SCAFFOLDING="$(echo ${DEPLOYMENT_SCAFFOLDING} | jq ".scaffolding_root += \"${TERRAGRNT_DEPLOYMENT_DIR}\"")"
 
 export TEMP_DIR="$(mktemp -d -t infra-live-XXXX)"
 
@@ -109,7 +109,12 @@ fi
 >&2 cd -
 
 >&2 tree -d ${TEMP_DIR}
+>&2 echo "1"
 >&2 tree -d ${TERRAGRNT_SELF_BOOTSTRAP_DIR}
+>&2 echo "2"
+>&2 tree -d ${TERRAGRNT_DEPLOYMENT_DIR}
+>&2 echo "3"
+>&2 tree -d "${TERRAGRNT_DEPLOYMENT_DIR}/.."
 
 if [ "${TERRAGGRUNT_SUCCESS}" == "true" ]; then
     print_success
