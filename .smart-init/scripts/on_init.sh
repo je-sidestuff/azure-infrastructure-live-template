@@ -44,6 +44,8 @@ message=$(echo "$INIT_RESULT" | jq -r '.message')
 echo "Template population complete. Result: $status - $message"
 
 if [[ "$status" != "success" ]]; then
+    echo "Full init result:"
+    echo "$INIT_RESULT"
     handle_error "Template population failed. Aborting."
 fi
 

@@ -111,22 +111,15 @@ sleep 20
 
 cd "${TERRAGRNT_SELF_BOOTSTRAP_DIR}/terragrunt/sandbox" 
 >&2 ls -latr
->&2 terragrunt run-all apply --terragrunt-non-interactive 
+>&2 terragrunt run-all plan --terragrunt-non-interactive
+if [ $? -eq 0 ]; then
+    export TERRAGGRUNT_SUCCESS="true"
+fi
 cd -
 
 >&2 tree -d ${TEMP_DIR}
 >&2 tree -d ${TERRAGRNT_SELF_BOOTSTRAP_DIR}
 
-# # Extract the filename from the JSON payload.
-# filename=$(echo "$json_payload" | jq -r '.filename')
-
-# # Check if the filename was extracted successfully
-# if [ -z "$filename" ]; then
-#   print_error "Could not extract filename from JSON."
-# fi
-
-# # Create the file (touch creates an empty file)
-# touch "$filename"
-
-# # Print the success JSON payload
-# print_success
+if [ "${TERRAGGRUNT_SUCCESS}" == "true" ]; then
+    print_success
+fi
