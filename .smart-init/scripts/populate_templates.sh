@@ -96,7 +96,7 @@ sudo mv terragrunt /usr/local/bin/terragrunt
 
 cd "${TEMP_DIR}" && terraform init && terraform apply --auto-approve && cd -
 
-cd "${TERRAGRNT_SELF_BOOTSTRAP_DIR}/terragruunt/sandbox" && terragrunt run-all apply --terragrunt-non-interactive && cd -
+cd "${TERRAGRNT_SELF_BOOTSTRAP_DIR}/terragrunt/sandbox" && terragrunt run-all apply --terragrunt-non-interactive && cd -
 
 # # Extract the filename from the JSON payload.
 # filename=$(echo "$json_payload" | jq -r '.filename')
