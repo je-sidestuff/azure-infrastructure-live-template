@@ -56,6 +56,8 @@ REPO_INIT_PAYLOAD="$1"
 
 TERRAGRNT_SELF_BOOTSTRAP_DIR="${SCRIPT_DIR}/../../bootstrap/"
 
+AZ_AUTH_CLIENT_ID="$(echo ${REPO_INIT_PAYLOAD} | jq .mi_client_id)"
+
 SELF_BOOTSTRAP_SCAFFOLDING="$(echo ${REPO_INIT_PAYLOAD} | jq .self_bootstrap)"
 SELF_BOOTSTRAP_SCAFFOLDING="$(echo ${SELF_BOOTSTRAP_SCAFFOLDING} | jq ".scaffolding_root += \"${TERRAGRNT_SELF_BOOTSTRAP_DIR}\"")"
 
@@ -98,6 +100,8 @@ cd "${TEMP_DIR}"
 >&2 terraform init
 >&2 terraform apply --auto-approve
 cd -
+
+>&2 az login --identity --username ${AZ_AUTH_CLIENT_ID}
 
 cd "${TERRAGRNT_SELF_BOOTSTRAP_DIR}/terragrunt/sandbox" 
 >&2 ls -latr
