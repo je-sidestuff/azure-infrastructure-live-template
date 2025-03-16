@@ -28,6 +28,12 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: main
+      - name: 'Login via Azure CLI'
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       - name: Initialize repo
         run: |
           chmod +x .smart-init/scripts/*.sh
