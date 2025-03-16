@@ -104,6 +104,11 @@ cd -
 >&2 echo "az login --identity --client-id ${AZ_AUTH_CLIENT_ID}"
 >&2 az login --identity --client-id ${AZ_AUTH_CLIENT_ID}
 
+sleep 20
+
+>&2 echo "az login --identity --client-id ${AZ_AUTH_CLIENT_ID}"
+>&2 az login --identity --client-id ${AZ_AUTH_CLIENT_ID}
+
 cd "${TERRAGRNT_SELF_BOOTSTRAP_DIR}/terragrunt/sandbox" 
 >&2 ls -latr
 >&2 terragrunt run-all apply --terragrunt-non-interactive 
