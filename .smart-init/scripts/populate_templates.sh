@@ -54,8 +54,10 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 # Read the JSON payload to feed into the terragrunt scaffolder
 REPO_INIT_PAYLOAD="$1"
 
+TERRAGRNT_SELF_BOOTSTRAP_DIR="${SCRIPT_DIR}/../../bootstrap/"
+
 SELF_BOOTSTRAP_SCAFFOLDING="$(echo ${REPO_INIT_PAYLOAD} | jq .self_bootstrap)"
-SELF_BOOTSTRAP_SCAFFOLDING="$(echo ${SELF_BOOTSTRAP_SCAFFOLDING} | jq ".scaffolding_root += \"${SCRIPT_DIR}/../../bootstrap/\"")"
+SELF_BOOTSTRAP_SCAFFOLDING="$(echo ${SELF_BOOTSTRAP_SCAFFOLDING} | jq ".scaffolding_root += \"${TERRAGRNT_SELF_BOOTSTRAP_DIR}\"")"
 
 export TEMP_DIR="$(mktemp -d -t infra-live-XXXX)"
 
@@ -75,8 +77,8 @@ EOF
 >&2 which terraform
 
 sudo apt-get install unzip
-curl "https://releases.hashicorp.com/terraform/1.3.7/terraform_1.3.7_linux_amd64.zip" -o "terraform_1.3.7_linux_amd64.zip"
-unzip terraform_1.3.7_linux_amd64.zip
+curl "https://releases.hashicorp.com/terraform/1.7.3/terraform_1.7.3_linux_amd64.zip" -o "terraform_1.7.3_linux_amd64.zip"
+unzip terraform_1.7.3_linux_amd64.zip
 sudo mv terraform /usr/local/bin/terraform
 
 >&2 echo "Which terraform?"
@@ -92,8 +94,9 @@ sudo mv terragrunt /usr/local/bin/terragrunt
 >&2 echo "Which terragrunt?"
 >&2 which terragrunt
 
-cd "${TEMP_DIR}" && terraform init && terraform plan && cd -
+cd "${TEMP_DIR}" && terraform init && terraform apply --auto-approve && cd -
 
+cd "${TERRAGRNT_SELF_BOOTSTRAP_DIR}/terragruunt/sandbox" && terragrunt run-all apply --terragrunt-non-interactive && cd -
 
 # # Extract the filename from the JSON payload.
 # filename=$(echo "$json_payload" | jq -r '.filename')
