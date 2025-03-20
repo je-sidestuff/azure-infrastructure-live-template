@@ -100,6 +100,32 @@ EOF
 >&2 terraform apply --auto-approve
 >&2 cd -
 
+# Check if the init payload contains the top level key 'backend'
+if [ -z "$(echo ${REPO_INIT_PAYLOAD} | jq .backend)" ]; then
+  # Extract the backend.resource_group, backend.storage_account and backend.container
+  BACKEND_RESOURCE_GROUP="$(echo ${REPO_INIT_PAYLOAD} | jq -r .backend.resource_group)"
+  BACKEND_STORAGE_ACCOUNT="$(echo ${REPO_INIT_PAYLOAD} | jq -r .backend.storage_account)"
+  BACKEND_CONTAINER="$(echo ${REPO_INIT_PAYLOAD} | jq -r .backend.container)"
+
+  # Create the backend-generator.hcl file
+  cat << EOT > "${TERRAGRNT_SELF_BOOTSTRAP_DIR}/terragrunt/backend-generator.hcl"
+generate "backend" {
+  path      = "backend.tf"
+  if_exists = "overwrite_terragrunt"
+  contents = <<EOF
+terraform {
+  backend "azurerm" {
+    resource_group_name  = "${BACKEND_RESOURCE_GROUP}"
+    storage_account_name = "${BACKEND_STORAGE_ACCOUNT}"
+    container_name       = "${BACKEND_CONTAINER}"
+    key                  = "\${path_relative_to_include()}/terraform.tfstate"
+    }
+}
+EOF
+}
+EOT
+fi
+
 >&2 cd "${TERRAGRNT_SELF_BOOTSTRAP_DIR}/terragrunt/sandbox" 
 >&2 ls -latr
 >&2 terragrunt run-all plan --terragrunt-non-interactive
@@ -108,12 +134,6 @@ if [ $? -eq 0 ]; then
 fi
 >&2 cd -
 
->&2 tree -d ${TEMP_DIR}
->&2 echo "1"
->&2 tree -d ${TERRAGRNT_SELF_BOOTSTRAP_DIR}
->&2 echo "2"
->&2 tree -d ${TERRAGRNT_DEPLOYMENT_DIR}
->&2 echo "3"
 >&2 tree -d "${TERRAGRNT_DEPLOYMENT_DIR}/.."
 
 if [ "${TERRAGGRUNT_SUCCESS}" == "true" ]; then
