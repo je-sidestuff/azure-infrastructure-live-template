@@ -124,6 +124,10 @@ terraform {
 EOF
 }
 EOT
+
+  >&2 pwd
+  >&2 cat "${TERRAGRNT_SELF_BOOTSTRAP_DIR}/terragrunt/backend-generator.hcl"
+
 fi
 
 >&2 cd "${TERRAGRNT_SELF_BOOTSTRAP_DIR}/terragrunt/sandbox" 
@@ -135,6 +139,7 @@ fi
 >&2 cd -
 
 >&2 tree -d "${TERRAGRNT_DEPLOYMENT_DIR}/.."
+>&2 tree "${TERRAGRNT_DEPLOYMENT_DIR}/.."
 
 if [ "${TERRAGGRUNT_SUCCESS}" == "true" ]; then
     print_success
