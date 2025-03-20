@@ -7,7 +7,7 @@
 #              REPLACED BY THE IMPLEMENTER WITH THEIR OWN CUSTOM LOGIC.
 
 
-# We expect the json to look similar to this:
+# We expect the json to look similar to this: (TODO: update this)
 # {
 #   "targets":{
 #     "storage_account" : {
@@ -120,6 +120,42 @@ terraform {
     container_name       = "${BACKEND_CONTAINER}"
     key                  = "\${path_relative_to_include()}/terraform.tfstate"
     }
+}
+EOF
+}
+EOT
+
+
+  SUBSCRIPTION_ID="$(echo ${REPO_INIT_PAYLOAD} | jq -r .self_bootstrap.subscription_id)"
+  
+  # Rewrite root.hcl as a workaround
+  cat << EOT > "${TERRAGRNT_SELF_BOOTSTRAP_DIR}/terragrunt/root.hcl"
+locals {
+  # Automatically load subscription-level variables
+  subscription_vars = read_terragrunt_config(find_in_parent_folders("subscription.hcl"))
+
+  # Automatically load region-level variables
+  region_vars = read_terragrunt_config(find_in_parent_folders("region.hcl"))
+
+  # Automatically load environment-level variables
+  environment_vars = read_terragrunt_config(find_in_parent_folders("env.hcl"))
+
+  # Extract the variables we need for easy access
+  subscription_id = local.subscription_vars.locals.subscription_id
+  # username     = local.account_vars.locals.username
+  # account_name = local.account_vars.locals.account_name
+  # aws_region   = local.region_vars.locals.aws_region
+}
+
+# Generate an Azure provider block
+generate "provider" {
+  path      = "provider.tf"
+  if_exists = "overwrite"
+  contents  = <<EOF
+provider "azurerm" {
+  subscription_id                 = "${SUBSCRIPTION_ID}"
+  resource_provider_registrations = "all"
+  features {}
 }
 EOF
 }
