@@ -101,7 +101,7 @@ EOF
 >&2 cd -
 
 # Check if the init payload contains the top level key 'backend'
-if [ -z "$(echo ${REPO_INIT_PAYLOAD} | jq .backend)" ]; then
+if [ -n "$(echo ${REPO_INIT_PAYLOAD} | jq .backend)" ]; then
   # Extract the backend.resource_group, backend.storage_account and backend.container
   BACKEND_RESOURCE_GROUP="$(echo ${REPO_INIT_PAYLOAD} | jq -r .backend.resource_group)"
   BACKEND_STORAGE_ACCOUNT="$(echo ${REPO_INIT_PAYLOAD} | jq -r .backend.storage_account)"
