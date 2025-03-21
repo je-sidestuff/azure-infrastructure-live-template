@@ -155,6 +155,9 @@ generate "provider" {
 provider "azurerm" {
   subscription_id                 = "${SUBSCRIPTION_ID}"
   resource_provider_registrations = "all"
+  use_msi                         = true
+  client_id                       = "${CLIENT_ID}"
+  tenant_id                       = "${TENANT_ID}"
   features {}
 }
 EOF
