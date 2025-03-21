@@ -119,6 +119,7 @@ terraform {
     storage_account_name = "${BACKEND_STORAGE_ACCOUNT}"
     container_name       = "${BACKEND_CONTAINER}"
     key                  = "\${path_relative_to_include()}/terraform.tfstate"
+    use_azuread_auth     = true
     }
 }
 EOF
