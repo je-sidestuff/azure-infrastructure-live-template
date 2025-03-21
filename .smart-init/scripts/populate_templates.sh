@@ -158,6 +158,7 @@ provider "azurerm" {
   subscription_id                 = "${SUBSCRIPTION_ID}"
   resource_provider_registrations = "all"
   use_msi                         = true
+  use_oidc                        = true
   client_id                       = "${CLIENT_ID}"
   tenant_id                       = "${TENANT_ID}"
   features {}
