@@ -166,6 +166,11 @@ EOT
 
 fi
 
+export ARM_USE_MSI=true
+export ARM_SUBSCRIPTION_ID=${SUBSCRIPTION_ID}
+export ARM_TENANT_ID=${TENANT_ID}
+export ARM_CLIENT_ID=${CLIENT_ID}
+
 >&2 cd "${TERRAGRNT_SELF_BOOTSTRAP_DIR}/terragrunt/sandbox" 
 >&2 ls -latr
 >&2 terragrunt run-all plan --terragrunt-non-interactive
