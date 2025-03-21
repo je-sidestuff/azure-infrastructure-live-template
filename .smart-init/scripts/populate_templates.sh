@@ -172,7 +172,7 @@ fi
 
 >&2 az storage container exists --account-name ${BACKEND_STORAGE_ACCOUNT} --name ${BACKEND_CONTAINER}
 
->&2 az storage blob list -c ${BACKEND_CONTAINER}
+>&2 az storage blob list -c ${BACKEND_CONTAINER} --account-name ${BACKEND_STORAGE_ACCOUNT}
 
 export ARM_USE_MSI=true
 export ARM_SUBSCRIPTION_ID=${SUBSCRIPTION_ID}
