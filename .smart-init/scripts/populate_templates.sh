@@ -187,7 +187,7 @@ export ARM_CLIENT_ID=${CLIENT_ID}
 
 >&2 cd "${TERRAGRNT_SELF_BOOTSTRAP_DIR}/terragrunt/sandbox" 
 >&2 ls -latr
->&2 terragrunt run-all plan --terragrunt-non-interactive
+>&2 terragrunt run-all plan --terragrunt-non-interactive -lock=false
 if [ $? -eq 0 ]; then
     export TERRAGGRUNT_SUCCESS="true"
 fi
