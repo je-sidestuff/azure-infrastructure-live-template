@@ -168,7 +168,11 @@ fi
 
 >&2 az storage account list
 
->&2 az storage account show "/subscriptions/${SUBSCRIPTION_ID}/resourceGroups/${BACKEND_RESOURCE_GROUP}/providers/Microsoft.Storage/storageAccounts/${BACKEND_STORAGE_ACCOUNT}"
+>&2 az storage account show --ids "/subscriptions/${SUBSCRIPTION_ID}/resourceGroups/${BACKEND_RESOURCE_GROUP}/providers/Microsoft.Storage/storageAccounts/${BACKEND_STORAGE_ACCOUNT}"
+
+>&2 az storage container exists --account-name ${BACKEND_STORAGE_ACCOUNT} --name ${BACKEND_CONTAINER}
+
+>&2 az storage blob list -c ${BACKEND_CONTAINER}
 
 export ARM_USE_MSI=true
 export ARM_SUBSCRIPTION_ID=${SUBSCRIPTION_ID}
