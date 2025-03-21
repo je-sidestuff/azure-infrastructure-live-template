@@ -166,6 +166,10 @@ EOT
 
 fi
 
+>&2 az storage account list
+
+>&2 az storage account show "/subscriptions/${SUBSCRIPTION_ID}/resourceGroups/${BACKEND_RESOURCE_GROUP}/providers/Microsoft.Storage/storageAccounts/${BACKEND_STORAGE_ACCOUNT}"
+
 export ARM_USE_MSI=true
 export ARM_SUBSCRIPTION_ID=${SUBSCRIPTION_ID}
 export ARM_TENANT_ID=${TENANT_ID}
