@@ -86,14 +86,17 @@ EOF
 
 >&2 cat ${TEMP_DIR}/main.tf
 
+>&2 cd /tmp/
 >&2 sudo apt-get install unzip
 >&2 curl "https://releases.hashicorp.com/terraform/1.9.1/terraform_1.9.1_linux_amd64.zip" -o "terraform_1.9.1_linux_amd64.zip"
 >&2 unzip terraform_1.9.1_linux_amd64.zip
 >&2 sudo mv terraform /usr/local/bin/terraform
+>&2 rm terraform_1.9.1_linux_amd64.zip
 
 >&2 curl -L https://github.com/gruntwork-io/terragrunt/releases/download/v0.75.10/terragrunt_linux_amd64 -o terragrunt
 >&2 chmod +x terragrunt
 >&2 sudo mv terragrunt /usr/local/bin/terragrunt
+>&2 cd -
 
 >&2 cd "${TEMP_DIR}"
 >&2 terraform init
@@ -250,7 +253,6 @@ if [ $? -eq 0 ]; then
 fi
 >&2 cd -
 
->&2 tree -d "${TERRAGRNT_DEPLOYMENT_DIR}/.."
 >&2 tree "${TERRAGRNT_DEPLOYMENT_DIR}/.."
 
 if [ "${TERRAGGRUNT_SUCCESS}" == "true" ]; then

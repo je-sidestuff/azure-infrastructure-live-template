@@ -1,6 +1,6 @@
 ---
 
-name: This workflow will initialize the repository
+name: Repository Init Workflow.
 
 on:
   push:
