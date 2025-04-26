@@ -68,7 +68,7 @@ export TEMP_DIR="$(mktemp -d -t infra-live-XXXX)"
 
 cat << EOF > "${TEMP_DIR}/main.tf"
 module "bootstrap_scaffolding" {
-  source = "github.com/je-sidestuff/terraform-github-orchestration//modules/terragrunt/scaffolder/from-json/?ref=environment_deployment_support"
+  source = "github.com/je-sidestuff/terraform-github-orchestration//modules/terragrunt/scaffolder/from-json/?ref=environment_deployment_cleanup"
 
   input_json = <<EOT
 ${SELF_BOOTSTRAP_SCAFFOLDING}
@@ -76,7 +76,7 @@ EOT
 }
 
 module "deployment_scaffolding" {
-  source = "github.com/je-sidestuff/terraform-github-orchestration//modules/terragrunt/scaffolder/from-json/?ref=environment_deployment_support"
+  source = "github.com/je-sidestuff/terraform-github-orchestration//modules/terragrunt/scaffolder/from-json/?ref=environment_deployment_cleanup"
 
   input_json = <<EOT
 ${DEPLOYMENT_SCAFFOLDING}
