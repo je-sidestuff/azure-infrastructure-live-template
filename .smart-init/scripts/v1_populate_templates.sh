@@ -91,6 +91,9 @@ terragrunt scaffold github.com/je-sidestuff/terraform-github-orchestration//modu
 terragrunt run-all apply --terragrunt-non-interactive
 cd -
 
+# Temporarily use our holdover methods for generators and backends.
+${SCRIPT_DIR}/v0_holdovers.sh
+
 cd $TERRAGRNT_SELF_BOOTSTRAP_DIR
 terragrunt run-all plan --terragrunt-non-interactive -lock=false
 if [ $? -eq 0 ]; then

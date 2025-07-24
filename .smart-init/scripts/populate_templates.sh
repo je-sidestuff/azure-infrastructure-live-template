@@ -55,7 +55,7 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 REPO_INIT_PAYLOAD="$1"
 
 # Read the version if it is present. Default to v0 if no version is present.
-INFRA_LIVE_VERSION="$(echo ${REPO_INIT_PAYLOAD} | jq .infra_live_version)"
+INFRA_LIVE_VERSION="$(echo ${REPO_INIT_PAYLOAD} | jq -r .infra_live_version)"
 
 # If we have no version default to v0
 if [ -z "$INFRA_LIVE_VERSION" ]; then
@@ -64,7 +64,7 @@ fi
 
 # Verify that the version of the populate templates file is present
 if [ ! -f "${SCRIPT_DIR}/${INFRA_LIVE_VERSION}_populate_templates.sh" ]; then
-  print_error "No template file found for ${INFRA_LIVE_VERSION}."
+  print_error "No template file found for ${INFRA_LIVE_VERSION}. (File not found ${SCRIPT_DIR}/${INFRA_LIVE_VERSION}_populate_templates.sh)"
 fi
 
 "${SCRIPT_DIR}/${INFRA_LIVE_VERSION}_populate_templates.sh" "$@"
