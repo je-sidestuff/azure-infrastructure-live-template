@@ -77,14 +77,14 @@ export SELF_BOOTSTRAP_SCAFFOLD_JSON_B64="$(echo ${REPO_INIT_PAYLOAD} | jq -r .se
 export DEPLOY_SCAFFOLD_JSON_B64="$(echo ${REPO_INIT_PAYLOAD} | jq -r .deploy_scaffold_json_b64)"
 
 # Scaffold our scaffolder so it can scaffold the remaining deployment tree
-mkdir $TERRAGRUNT_DEPLOYMENT_SCAFFOLD_DIR
+mkdir -p $TERRAGRUNT_DEPLOYMENT_SCAFFOLD_DIR
 cd $TERRAGRUNT_DEPLOYMENT_SCAFFOLD_DIR
 terragrunt scaffold github.com/je-sidestuff/terraform-github-orchestration//modules/terragrunt/scaffolder/from-json?ref=$TGO_REF --var=InputJsonB64="$DEPLOYMENT_SCAFFOLD_JSON_B64" --terragrunt-non-interactive
 terragrunt run-all apply --terragrunt-non-interactive
 cd -
 
 # Scaffold our scaffolder so it can scaffold the remaining self-bootstrap tree
-mkdir $TERRAGRUNT_SELF_BOOTSTRAP_SCAFFOLD_DIR
+mkdir -p $TERRAGRUNT_SELF_BOOTSTRAP_SCAFFOLD_DIR
 cd $TERRAGRUNT_SELF_BOOTSTRAP_SCAFFOLD_DIR
 TGO_REF="support_self_bootstrapped_state_scaffold_fully"
 terragrunt scaffold github.com/je-sidestuff/terraform-github-orchestration//modules/terragrunt/scaffolder/from-json?ref=$TGO_REF --var=InputJsonB64="$SELF_BOOTSTRAP_SCAFFOLD_JSON_B64" --terragrunt-non-interactive
