@@ -76,30 +76,36 @@ export BACKEND_JSON="$(echo ${REPO_INIT_PAYLOAD} | jq -r .backend)"
 export SELF_BOOTSTRAP_SCAFFOLD_JSON_B64="$(echo ${REPO_INIT_PAYLOAD} | jq -r .self_bootstrap_scaffold_json_b64)"
 export DEPLOY_SCAFFOLD_JSON_B64="$(echo ${REPO_INIT_PAYLOAD} | jq -r .deploy_scaffold_json_b64)"
 
+# TODO - parameterize
+export TGO_REF="support_self_bootstrapped_state_scaffold_fully"
+
 # Scaffold our scaffolder so it can scaffold the remaining deployment tree
-mkdir -p $TERRAGRUNT_DEPLOYMENT_SCAFFOLD_DIR
-cd $TERRAGRUNT_DEPLOYMENT_SCAFFOLD_DIR
-terragrunt scaffold github.com/je-sidestuff/terraform-github-orchestration//modules/terragrunt/scaffolder/from-json?ref=$TGO_REF --var=InputJsonB64="$DEPLOYMENT_SCAFFOLD_JSON_B64" --terragrunt-non-interactive
-terragrunt run-all apply --terragrunt-non-interactive
-cd -
+>&2 mkdir -p $TERRAGRUNT_DEPLOYMENT_SCAFFOLD_DIR
+>&2 cd $TERRAGRUNT_DEPLOYMENT_SCAFFOLD_DIR
+>&2  terragrunt scaffold github.com/je-sidestuff/terraform-github-orchestration//modules/terragrunt/scaffolder/from-json?ref=$TGO_REF --var=InputJsonB64="$DEPLOYMENT_SCAFFOLD_JSON_B64" --terragrunt-non-interactive
+>&2 terragrunt run-all apply --terragrunt-non-interactive
+>&2 echo "deploy scaffolded"
+>&2 tree .
+>&2 cd -
 
 # Scaffold our scaffolder so it can scaffold the remaining self-bootstrap tree
-mkdir -p $TERRAGRUNT_SELF_BOOTSTRAP_SCAFFOLD_DIR
-cd $TERRAGRUNT_SELF_BOOTSTRAP_SCAFFOLD_DIR
-TGO_REF="support_self_bootstrapped_state_scaffold_fully"
-terragrunt scaffold github.com/je-sidestuff/terraform-github-orchestration//modules/terragrunt/scaffolder/from-json?ref=$TGO_REF --var=InputJsonB64="$SELF_BOOTSTRAP_SCAFFOLD_JSON_B64" --terragrunt-non-interactive
-terragrunt run-all apply --terragrunt-non-interactive
-cd -
+>&2 mkdir -p $TERRAGRUNT_SELF_BOOTSTRAP_SCAFFOLD_DIR
+>&2 cd $TERRAGRUNT_SELF_BOOTSTRAP_SCAFFOLD_DIR
+>&2 terragrunt scaffold github.com/je-sidestuff/terraform-github-orchestration//modules/terragrunt/scaffolder/from-json?ref=$TGO_REF --var=InputJsonB64="$SELF_BOOTSTRAP_SCAFFOLD_JSON_B64" --terragrunt-non-interactive
+>&2 terragrunt run-all apply --terragrunt-non-interactive
+>&2 echo "bootstrap scaffolded"
+>&2 tree .
+>&2 cd -
 
 # Temporarily use our holdover methods for generators and backends.
-${SCRIPT_DIR}/v0_holdovers.sh
+>&2 ${SCRIPT_DIR}/v0_holdovers.sh
 
-cd $TERRAGRNT_SELF_BOOTSTRAP_DIR
-terragrunt run-all plan --terragrunt-non-interactive -lock=false
+>&2 cd $TERRAGRNT_SELF_BOOTSTRAP_DIR
+>&2 terragrunt run-all plan --terragrunt-non-interactive -lock=false
 if [ $? -eq 0 ]; then
     export TERRAGGRUNT_SUCCESS="true"
 fi
-cd -
+>&2 cd -
 
 if [ "${TERRAGGRUNT_SUCCESS}" == "true" ]; then
     print_success
