@@ -77,7 +77,7 @@ export SELF_BOOTSTRAP_SCAFFOLD_JSON_B64="$(echo ${REPO_INIT_PAYLOAD} | jq -r .se
 export DEPLOY_SCAFFOLD_JSON_B64="$(echo ${REPO_INIT_PAYLOAD} | jq -r .deploy_scaffold_json_b64)"
 
 # TODO - parameterize
-export TGO_REF="support_self_bootstrapped_state_scaffold_fully"
+export TGO_REF="scaffold-refactor"
 
 # Scaffold our scaffolder so it can scaffold the remaining deployment tree
 >&2 mkdir -p $TERRAGRUNT_DEPLOYMENT_SCAFFOLD_DIR
