@@ -66,13 +66,13 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 # Read the JSON payload to feed into the terragrunt scaffolder
 REPO_INIT_PAYLOAD="$1"
 
-export TF_VAR_subscription_id = "${SUBSCRIPTION_ID}"
+export TF_VAR_subscription_id="${SUBSCRIPTION_ID}"
 TERRAGRUNT_SELF_BOOTSTRAP_DIR="${SCRIPT_DIR}/../../bootstrap/"
 export TERRAGRUNT_SELF_BOOTSTRAP_SCAFFOLD_DIR="${TERRAGRNT_SELF_BOOTSTRAP_DIR}/terragrunt/scaffold"
 TERRAGRNT_DEPLOYMENT_DIR="${SCRIPT_DIR}/../../deployment/"
 export TERRAGRUNT_DEPLOYMENT_SCAFFOLD_DIR="${TERRAGRNT_DEPLOYMENT_DIR}/terragrunt/scaffold"
 
-export BACKEND_JSON = "$(echo ${REPO_INIT_PAYLOAD} | jq -r .backend)"
+export BACKEND_JSON="$(echo ${REPO_INIT_PAYLOAD} | jq -r .backend)"
 export SELF_BOOTSTRAP_SCAFFOLD_JSON_B64="$(echo ${REPO_INIT_PAYLOAD} | jq -r .self_bootstrap_scaffold_json_b64)"
 export DEPLOY_SCAFFOLD_JSON_B64="$(echo ${REPO_INIT_PAYLOAD} | jq -r .deploy_scaffold_json_b64)"
 
