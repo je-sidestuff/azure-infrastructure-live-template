@@ -2,6 +2,8 @@
 
 # This file keeps the v0 techniques in place for backend and provider generation while that is not yet available properly.
 
+>&2 echo "cat << EOT > ${TERRAGRNT_SELF_BOOTSTRAP_DIR}/terragrunt/backend-generator.hcl"
+
   # Create the backend-generator.hcl file
   cat << EOT > "${TERRAGRNT_SELF_BOOTSTRAP_DIR}/terragrunt/backend-generator.hcl"
 generate "backend" {
@@ -22,6 +24,9 @@ EOF
 }
 EOT
   
+
+>&2 echo "2cat << EOT > ${TERRAGRNT_SELF_BOOTSTRAP_DIR}/terragrunt/root.hcl"
+
   # Rewrite root.hcl as a workaround
   cat << EOT > "${TERRAGRNT_SELF_BOOTSTRAP_DIR}/terragrunt/root.hcl"
 locals {
@@ -60,6 +65,7 @@ EOF
 EOT
 
   >&2 pwd
+>&2 echo "3cat << EOT > ${TERRAGRNT_SELF_BOOTSTRAP_DIR}/terragrunt/root.hcl"
   >&2 cat "${TERRAGRNT_SELF_BOOTSTRAP_DIR}/terragrunt/backend-generator.hcl"
 
   # Extract the backend.resource_group, backend.storage_account and backend.container
@@ -90,6 +96,8 @@ EOT
 
   SUBSCRIPTION_ID="$(echo ${REPO_INIT_PAYLOAD} | jq -r .self_bootstrap.subscription_id)"
   
+>&2 echo "4cat << EOT > ${TERRAGRNT_DEPLOYMENT_DIR}/terragrunt/root.hcl"
+
   # Rewrite root.hcl as a workaround
   cat << EOT > "${TERRAGRNT_DEPLOYMENT_DIR}/terragrunt/root.hcl"
 locals {
