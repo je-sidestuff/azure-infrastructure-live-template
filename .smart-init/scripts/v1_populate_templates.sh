@@ -77,7 +77,7 @@ export SELF_BOOTSTRAP_SCAFFOLD_JSON_B64="$(echo ${REPO_INIT_PAYLOAD} | jq -r .se
 export DEPLOY_SCAFFOLD_JSON_B64="$(echo ${REPO_INIT_PAYLOAD} | jq -r .deploy_scaffold_json_b64)"
 
 # TODO - parameterize
-export TGO_REF="scaffold-refactor"
+export TGO_REF="finish_scaffold_generators_and_backends"
 
 # Scaffold our scaffolder so it can scaffold the remaining deployment tree
 >&2 mkdir -p $TERRAGRUNT_DEPLOYMENT_SCAFFOLD_DIR
@@ -102,7 +102,7 @@ export TGO_REF="scaffold-refactor"
 >&2 cd -
 
 # Temporarily use our holdover methods for generators and backends.
->&2 ${SCRIPT_DIR}/v0_holdovers.sh
+# >&2 ${SCRIPT_DIR}/v0_holdovers.sh
 
 >&2 cd $TERRAGRNT_SELF_BOOTSTRAP_DIR
 >&2 terragrunt run-all plan --terragrunt-non-interactive -lock=false
