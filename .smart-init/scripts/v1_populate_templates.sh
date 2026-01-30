@@ -79,13 +79,13 @@ export DEPLOY_SCAFFOLD_JSON_B64="$(echo ${REPO_INIT_PAYLOAD} | jq -r .deploy_sca
 # TODO - parameterize
 export TGO_REF="finish_scaffold_generators_and_backends"
 
-export RESOURCE_GROUP_NAME=="$(echo ${REPO_INIT_PAYLOAD} | jq -r .backend.resource_group)"
-export STORAGE_ACCOUNT_NAME=="$(echo ${REPO_INIT_PAYLOAD} | jq -r .backend.storage_account_name)"
-export CONTAINER_NAME=="$(echo ${REPO_INIT_PAYLOAD} | jq -r .backend.container_name)"
+export RESOURCE_GROUP_NAME="$(echo ${REPO_INIT_PAYLOAD} | jq -r .backend.resource_group)"
+export STORAGE_ACCOUNT_NAME="$(echo ${REPO_INIT_PAYLOAD} | jq -r .backend.storage_account)"
+export CONTAINER_NAME="$(echo ${REPO_INIT_PAYLOAD} | jq -r .backend.container)"
 
-export SUBSCRIPTION_ID=="$(echo ${REPO_INIT_PAYLOAD} | jq -r .provider_mi.subscription_id)"
-export TENANT_ID=="$(echo ${REPO_INIT_PAYLOAD} | jq -r .provider_mi.tenant_id)"
-export CLIENT_ID=="$(echo ${REPO_INIT_PAYLOAD} | jq -r .provider_mi.client_id)"
+export SUBSCRIPTION_ID="$(echo ${REPO_INIT_PAYLOAD} | jq -r .provider_mi.subscription_id)"
+export TENANT_ID="$(echo ${REPO_INIT_PAYLOAD} | jq -r .provider_mi.tenant_id)"
+export CLIENT_ID="$(echo ${REPO_INIT_PAYLOAD} | jq -r .provider_mi.client_id)"
 
 export TF_VAR_backend_generators="$(cat <<EOF
 {
