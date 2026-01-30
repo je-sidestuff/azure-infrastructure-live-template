@@ -83,9 +83,10 @@ export RESOURCE_GROUP_NAME="$(echo ${REPO_INIT_PAYLOAD} | jq -r .backend.resourc
 export STORAGE_ACCOUNT_NAME="$(echo ${REPO_INIT_PAYLOAD} | jq -r .backend.storage_account)"
 export CONTAINER_NAME="$(echo ${REPO_INIT_PAYLOAD} | jq -r .backend.container)"
 
-export SUBSCRIPTION_ID="$(echo ${REPO_INIT_PAYLOAD} | jq -r .provider_mi.subscription_id)"
-export TENANT_ID="$(echo ${REPO_INIT_PAYLOAD} | jq -r .provider_mi.tenant_id)"
-export CLIENT_ID="$(echo ${REPO_INIT_PAYLOAD} | jq -r .provider_mi.client_id)"
+export ARM_SUBSCRIPTION_ID="$(echo ${REPO_INIT_PAYLOAD} | jq -r .provider_mi.subscription_id)"
+export ARM_TENANT_ID="$(echo ${REPO_INIT_PAYLOAD} | jq -r .provider_mi.tenant_id)"
+export ARM_CLIENT_ID="$(echo ${REPO_INIT_PAYLOAD} | jq -r .provider_mi.client_id)"
+export ARM_USE_MSI=true
 
 export TF_VAR_backend_generators="$(cat <<EOF
 {
@@ -108,9 +109,9 @@ export TF_VAR_provider_generators="$(cat <<EOF
     "provider_type": "azure",
     "provider_subtype": "managed_service_identity",
     "arguments": {
-      "subscription_id": "$SUBSCRIPTION_ID",
-      "tenant_id": "$TENANT_ID",
-      "client_id": "$CLIENT_ID"
+      "subscription_id": "$ARM_SUBSCRIPTION_ID",
+      "tenant_id": "$ARM_TENANT_ID",
+      "client_id": "$ARM_CLIENT_ID"
     }
   }
 }
