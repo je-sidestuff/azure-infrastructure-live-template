@@ -79,6 +79,44 @@ export DEPLOY_SCAFFOLD_JSON_B64="$(echo ${REPO_INIT_PAYLOAD} | jq -r .deploy_sca
 # TODO - parameterize
 export TGO_REF="finish_scaffold_generators_and_backends"
 
+export RESOURCE_GROUP_NAME=="$(echo ${REPO_INIT_PAYLOAD} | jq -r .backend.resource_group)"
+export STORAGE_ACCOUNT_NAME=="$(echo ${REPO_INIT_PAYLOAD} | jq -r .backend.storage_account_name)"
+export CONTAINER_NAME=="$(echo ${REPO_INIT_PAYLOAD} | jq -r .backend.container_name)"
+
+export SUBSCRIPTION_ID=="$(echo ${REPO_INIT_PAYLOAD} | jq -r .provider_mi.subscription_id)"
+export TENANT_ID=="$(echo ${REPO_INIT_PAYLOAD} | jq -r .provider_mi.tenant_id)"
+export CLIENT_ID=="$(echo ${REPO_INIT_PAYLOAD} | jq -r .provider_mi.client_id)"
+
+export TF_VAR_backend_generators="$(cat <<EOF
+{
+  "my_backend": {
+    "backend_type": "azure",
+    "backend_subtype": "managed_service_identity",
+    "arguments": {
+      "resource_group_name": "$RESOURCE_GROUP_NAME",
+      "storage_account_name": "$STORAGE_ACCOUNT_NAME",
+      "container_name": "$CONTAINER_NAME"
+    }
+  }
+}
+EOF
+)"
+
+export TF_VAR_provider_generators="$(cat <<EOF
+{
+  "my_provider": {
+    "provider_type": "azure",
+    "provider_subtype": "managed_service_identity",
+    "arguments": {
+      "subscription_id": "$SUBSCRIPTION_ID",
+      "tenant_id": "$TENANT_ID",
+      "client_id": "$CLIENT_ID"
+    }
+  }
+}
+EOF
+)"
+
 # Scaffold our scaffolder so it can scaffold the remaining deployment tree
 >&2 mkdir -p $TERRAGRUNT_DEPLOYMENT_SCAFFOLD_DIR
 >&2 cd $TERRAGRUNT_DEPLOYMENT_SCAFFOLD_DIR
