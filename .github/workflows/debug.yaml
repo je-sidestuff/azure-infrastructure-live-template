@@ -1,0 +1,46 @@
+---
+
+name: Repository Debug Workflow.
+
+on:
+  push:
+    branches:
+      - debug
+
+jobs:
+  oidc_debug_test:
+    permissions:
+      contents: read
+      id-token: write
+    runs-on: ubuntu-latest
+    name: A test of the oidc debugger
+    steps:
+      - name: Debug OIDC Claims
+        uses: github/actions-oidc-debugger@main
+        with:
+          audience: '${{ github.server_url }}/${{ github.repository_owner }}'
+  debug-repo:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write # This is required for requesting the JWT
+      contents: write # This is required for pushing tags
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: 'Login via Azure CLI'
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_MI_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      - name: Initialize repo
+        env:
+          SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+          CLIENT_ID: ${{ secrets.AZURE_MI_CLIENT_ID }}
+          TF_VAR_github_pat: ${{ secrets.GH_PAT }}
+        run: |
+          chmod +x .smart-init/scripts/*.sh
+          .smart-init/scripts/debug_init.sh
+        shell: bash

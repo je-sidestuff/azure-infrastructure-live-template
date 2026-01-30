@@ -53,6 +53,7 @@ fi
 # Write the JSON payload to the appropriate file
 echo "$json_payload" > "$filename"
 
-push_content_and_tag_to_git "$commit_message" "$tag"
+# Do not actually push for debug script
+# push_content_and_tag_to_git "$commit_message" "$tag"
 
 echo "Initialization process completed."

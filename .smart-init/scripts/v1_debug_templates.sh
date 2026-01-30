@@ -67,9 +67,9 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 REPO_INIT_PAYLOAD="$1"
 
 export TF_VAR_subscription_id="${SUBSCRIPTION_ID}"
-TERRAGRUNT_SELF_BOOTSTRAP_DIR="${SCRIPT_DIR}/../../bootstrap/"
+TERRAGRUNT_SELF_BOOTSTRAP_DIR="${SCRIPT_DIR}/../../debug-bootstrap/"
 export TERRAGRUNT_SELF_BOOTSTRAP_SCAFFOLD_DIR="${TERRAGRUNT_SELF_BOOTSTRAP_DIR}/terragrunt/scaffold"
-TERRAGRNT_DEPLOYMENT_DIR="${SCRIPT_DIR}/../../deployment/"
+TERRAGRNT_DEPLOYMENT_DIR="${SCRIPT_DIR}/../../debug-deployment/"
 export TERRAGRUNT_DEPLOYMENT_SCAFFOLD_DIR="${TERRAGRNT_DEPLOYMENT_DIR}/terragrunt/scaffold"
 
 export BACKEND_JSON="$(echo ${REPO_INIT_PAYLOAD} | jq -r .backend)"
@@ -121,7 +121,7 @@ EOF
 # Scaffold our scaffolder so it can scaffold the remaining deployment tree
 >&2 mkdir -p $TERRAGRUNT_DEPLOYMENT_SCAFFOLD_DIR
 >&2 cd $TERRAGRUNT_DEPLOYMENT_SCAFFOLD_DIR
->&2 export TF_VAR_scaffolding_root="${TERRAGRNT_DEPLOYMENT_DIR}/terragrunt"
+>&2 export TF_VAR_scaffolding_root="${TERRAGRUNT_DEPLOYMENT_DIR}"
 >&2 echo "terragrunt scaffold github.com/je-sidestuff/terraform-github-orchestration//modules/terragrunt/scaffolder/from-json?ref=$TGO_REF --var=InputJsonB64=/"$DEPLOY_SCAFFOLD_JSON_B64/" --terragrunt-non-interactive"
 >&2 terragrunt scaffold github.com/je-sidestuff/terraform-github-orchestration//modules/terragrunt/scaffolder/from-json?ref=$TGO_REF --var=InputJsonB64="$DEPLOY_SCAFFOLD_JSON_B64" --terragrunt-non-interactive
 >&2 terragrunt run-all apply --terragrunt-non-interactive
@@ -132,7 +132,7 @@ EOF
 # Scaffold our scaffolder so it can scaffold the remaining self-bootstrap tree
 >&2 mkdir -p $TERRAGRUNT_SELF_BOOTSTRAP_SCAFFOLD_DIR
 >&2 cd $TERRAGRUNT_SELF_BOOTSTRAP_SCAFFOLD_DIR
->&2 export TF_VAR_scaffolding_root="${TERRAGRUNT_SELF_BOOTSTRAP_DIR}/terragrunt"
+>&2 export TF_VAR_scaffolding_root="${TERRAGRUNT_SELF_BOOTSTRAP_DIR}"
 >&2 echo "terragrunt scaffold github.com/je-sidestuff/terraform-github-orchestration//modules/terragrunt/scaffolder/from-json?ref=$TGO_REF --var=InputJsonB64=/"$SELF_BOOTSTRAP_SCAFFOLD_JSON_B64/" --terragrunt-non-interactive"
 >&2 terragrunt scaffold github.com/je-sidestuff/terraform-github-orchestration//modules/terragrunt/scaffolder/from-json?ref=$TGO_REF --var=InputJsonB64="$SELF_BOOTSTRAP_SCAFFOLD_JSON_B64" --terragrunt-non-interactive
 >&2 terragrunt run-all apply --terragrunt-non-interactive
