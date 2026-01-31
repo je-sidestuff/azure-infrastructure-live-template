@@ -54,6 +54,6 @@ fi
 echo "$json_payload" > "$filename"
 
 # Do not actually push for debug script
-# push_content_and_tag_to_git "$commit_message" "$tag"
+push_content_and_tag_to_git "$commit_message" "$tag"
 
 echo "Initialization process completed."
