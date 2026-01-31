@@ -143,7 +143,7 @@ EOF
 # Temporarily use our holdover methods for generators and backends.
 # >&2 ${SCRIPT_DIR}/v0_holdovers.sh
 
->&2 cd $TERRAGRNT_SELF_BOOTSTRAP_DIR
+>&2 cd $TERRAGRUNT_SELF_BOOTSTRAP_DIR
 >&2 terragrunt run-all plan --terragrunt-non-interactive -lock=false
 if [ $? -eq 0 ]; then
     export TERRAGGRUNT_SUCCESS="true"
