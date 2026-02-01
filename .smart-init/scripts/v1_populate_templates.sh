@@ -150,6 +150,9 @@ if [ $? -eq 0 ]; then
 fi
 >&2 cd -
 
+cd "${SCRIPT_DIR}/../.."
+rm -rf `find . -name '.terraform'`; rm -rf `find . -name '.terraform.lock*'`; rm -rf `find . -name '.terragrunt-cache'`
+
 if [ "${TERRAGGRUNT_SUCCESS}" == "true" ]; then
     print_success
 fi
